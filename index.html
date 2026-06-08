@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Internship Training Diary — Nirman Fincap</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a2e;
+    --ink-soft: #4a4a6a;
+    --ink-muted: #8888aa;
+    --paper: #faf9f6;
+    --paper-warm: #f4f1ea;
+    --paper-line: #e8e3d8;
+    --accent: #c0392b;
+    --accent-soft: #f5e6e4;
+    --gold: #b8860b;
+    --gold-soft: #fdf6e3;
+    --teal: #0f6e56;
+    --teal-soft: #e1f5ee;
+    --margin-red: #e8a0a0;
+    --margin-blue: #7fb3d3;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* ── COVER PAGE ── */
+  .cover {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 60px 40px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 27px,
+      rgba(255,255,255,0.03) 27px,
+      rgba(255,255,255,0.03) 28px
+    );
+  }
+
+  .cover-inner { position: relative; z-index: 1; max-width: 560px; }
+
+  .cover-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+  }
+
+  .cover-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 52px;
+    font-weight: 400;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+
+  .cover-subtitle {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 400;
+    color: rgba(250,249,246,0.5);
+    margin-bottom: 48px;
+    font-style: italic;
+  }
+
+  .cover-meta {
+    border-top: 1px solid rgba(255,255,255,0.15);
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    padding: 28px 0;
+    margin-bottom: 40px;
+  }
+
+  .cover-meta-row {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    flex-wrap: wrap;
+  }
+
+  .cover-meta-item { text-align: center; }
+  .cover-meta-item .label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(250,249,246,0.4);
+    margin-bottom: 6px;
+    font-family: 'DM Mono', monospace;
+  }
+  .cover-meta-item .value {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(250,249,246,0.9);
+  }
+
+  .cover-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 32px;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 4px;
+    font-size: 13px;
+    letter-spacing: 1px;
+    color: rgba(250,249,246,0.8);
+    cursor: pointer;
+    background: none;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+    text-transform: uppercase;
+  }
+  .cover-cta:hover { background: rgba(255,255,255,0.08); color: var(--paper); }
+
+  /* ── DIARY CONTAINER ── */
+  .diary-container {
+    display: none;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+  }
+
+  /* ── HEADER BAR ── */
+  .top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 0;
+    margin-bottom: 32px;
+    border-bottom: 1px solid var(--paper-line);
+  }
+
+  .top-bar-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--ink);
+  }
+
+  .top-bar-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .nav-btn {
+    padding: 6px 16px;
+    border: 1px solid var(--paper-line);
+    border-radius: 4px;
+    background: none;
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    color: var(--ink-soft);
+    transition: all 0.15s;
+  }
+  .nav-btn:hover { border-color: var(--ink-soft); color: var(--ink); }
+  .nav-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  /* ── SIDEBAR + MAIN LAYOUT ── */
+  .diary-layout { display: flex; gap: 28px; align-items: flex-start; }
+
+  .sidebar {
+    width: 200px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 20px;
+  }
+
+  .sidebar-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 10px;
+  }
+
+  .week-nav { list-style: none; }
+  .week-nav li {
+    margin-bottom: 2px;
+  }
+  .week-nav li a {
+    display: block;
+    padding: 5px 10px;
+    font-size: 12px;
+    color: var(--ink-soft);
+    text-decoration: none;
+    border-radius: 3px;
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+    font-family: 'DM Mono', monospace;
+  }
+  .week-nav li a:hover { color: var(--ink); background: var(--paper-warm); }
+  .week-nav li a.active { color: var(--accent); border-left-color: var(--accent); background: var(--accent-soft); }
+
+  /* ── CONTENT AREA ── */
+  .content { flex: 1; min-width: 0; }
+
+  /* ── WEEK CARD ── */
+  .week-card {
+    background: white;
+    border: 1px solid var(--paper-line);
+    border-radius: 6px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    display: none;
+  }
+  .week-card.visible { display: block; }
+
+  .week-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 28px 18px;
+    border-bottom: 1px solid var(--paper-line);
+    background: var(--paper-warm);
+    cursor: pointer;
+  }
+
+  .week-header-left { display: flex; align-items: center; gap: 16px; }
+
+  .week-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 600;
+    color: var(--paper-line);
+    line-height: 1;
+    user-select: none;
+  }
+
+  .week-header-text {}
+  .week-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+  .week-dates {
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    color: var(--ink-muted);
+    letter-spacing: 0.5px;
+  }
+
+  .week-toggle {
+    font-size: 18px;
+    color: var(--ink-muted);
+    transition: transform 0.2s;
+    user-select: none;
+  }
+  .week-card.expanded .week-toggle { transform: rotate(180deg); }
+
+  .week-body { display: none; padding: 0; }
+  .week-card.expanded .week-body { display: block; }
+
+  /* ── DAY ENTRIES ── */
+  .day-entry {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    border-bottom: 1px solid var(--paper-line);
+  }
+  .day-entry:last-child { border-bottom: none; }
+
+  .day-label {
+    padding: 20px 0 20px 28px;
+    border-right: 1px solid var(--paper-line);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+
+  .day-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 4px;
+  }
+
+  .day-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--paper-line);
+    margin-top: 2px;
+  }
+  .day-dot.worked { background: var(--teal); }
+  .day-dot.half { background: var(--gold); }
+
+  .day-content { padding: 18px 28px 18px 24px; }
+
+  .day-activities { list-style: none; }
+  .day-activities li {
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--ink-soft);
+    padding: 2px 0;
+    padding-left: 14px;
+    position: relative;
+  }
+  .day-activities li::before {
+    content: '–';
+    position: absolute;
+    left: 0;
+    color: var(--margin-blue);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .day-note {
+    margin-top: 10px;
+    padding: 10px 14px;
+    background: var(--gold-soft);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 4px 4px 0;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    font-style: italic;
+    line-height: 1.6;
+  }
+
+  .day-tag {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 3px 10px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.3px;
+  }
+  .tag-learn { background: var(--teal-soft); color: var(--teal); }
+  .tag-build { background: var(--accent-soft); color: var(--accent); }
+  .tag-test { background: var(--gold-soft); color: var(--gold); }
+  .tag-review { background: #f0eef8; color: #534AB7; }
+  .tag-meeting { background: #e1f5ee; color: #0f6e56; }
+
+  /* ── SEARCH / FILTER BAR ── */
+  .filter-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .filter-bar input {
+    flex: 1;
+    min-width: 180px;
+    padding: 8px 14px;
+    border: 1px solid var(--paper-line);
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    background: white;
+    color: var(--ink);
+    outline: none;
+    transition: border 0.15s;
+  }
+  .filter-bar input:focus { border-color: var(--ink-soft); }
+
+  .phase-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.3px;
+    border: 1px solid var(--paper-line);
+    background: white;
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .phase-badge:hover { border-color: var(--ink-soft); }
+  .phase-badge.selected { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  /* ── WEEK SUMMARY RIBBON ── */
+  .week-summary {
+    display: flex;
+    gap: 20px;
+    padding: 14px 28px;
+    border-bottom: 1px solid var(--paper-line);
+    background: white;
+    flex-wrap: wrap;
+  }
+
+  .week-summary-item { display: flex; align-items: center; gap: 6px; }
+  .week-summary-item .s-label {
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    color: var(--ink-muted);
+    letter-spacing: 0.5px;
+  }
+  .week-summary-item .s-val {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink);
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ── OVERVIEW MODE ── */
+  .overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 12px;
+  }
+
+  .overview-card {
+    background: white;
+    border: 1px solid var(--paper-line);
+    border-radius: 6px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .overview-card:hover { border-color: var(--ink-soft); transform: translateY(-1px); }
+
+  .ov-week {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 6px;
+  }
+  .ov-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    color: var(--ink);
+    margin-bottom: 8px;
+    line-height: 1.4;
+  }
+  .ov-phase {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 2px;
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* Phase colors */
+  .phase-onboarding { background: #f0eef8; color: #534AB7; }
+  .phase-learning { background: var(--teal-soft); color: var(--teal); }
+  .phase-development { background: var(--accent-soft); color: var(--accent); }
+  .phase-testing { background: var(--gold-soft); color: var(--gold); }
+  .phase-integration { background: #e6f1fb; color: #185FA5; }
+
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 16px;
+    border: 1px solid var(--paper-line);
+    border-radius: 4px;
+    background: none;
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+    cursor: pointer;
+    color: var(--ink-soft);
+    margin-bottom: 20px;
+    transition: all 0.15s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .back-btn:hover { color: var(--ink); border-color: var(--ink-soft); }
+
+  /* ── PROGRESS BAR ── */
+  .progress-strip {
+    display: flex;
+    gap: 3px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+  .progress-week {
+    width: 30px;
+    height: 6px;
+    border-radius: 2px;
+    background: var(--paper-line);
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+  }
+  .progress-week.done { background: var(--teal); }
+  .progress-week.current { background: var(--accent); }
+  .progress-week:hover { transform: scaleY(1.8); }
+  .progress-week-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-muted);
+    margin-bottom: 4px;
+    letter-spacing: 0.5px;
+  }
+
+  @media (max-width: 640px) {
+    .diary-layout { flex-direction: column; }
+    .sidebar { width: 100%; position: static; }
+    .week-nav { display: flex; flex-wrap: wrap; gap: 4px; }
+    .week-nav li a { padding: 4px 10px; }
+    .day-entry { grid-template-columns: 60px 1fr; }
+    .cover-title { font-size: 36px; }
+    .week-num { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════ COVER ══════════ -->
+<div class="cover" id="cover">
+  <div class="cover-inner">
+    <div class="cover-label">Industrial Training Record</div>
+    <div class="cover-title">Internship<br>Daily Diary</div>
+    <div class="cover-subtitle">Six Months at Nirman Fincap</div>
+    <div class="cover-meta">
+      <div class="cover-meta-row">
+        <div class="cover-meta-item">
+          <div class="label">Student</div>
+          <div class="value">Naminder Singh</div>
+        </div>
+        <div class="cover-meta-item">
+          <div class="label">Roll No.</div>
+          <div class="value">2203507</div>
+        </div>
+        <div class="cover-meta-item">
+          <div class="label">Organization</div>
+          <div class="value">Nirman Fincap</div>
+        </div>
+        <div class="cover-meta-item">
+          <div class="label">Duration</div>
+          <div class="value">22 Weeks</div>
+        </div>
+        <div class="cover-meta-item">
+          <div class="label">Project</div>
+          <div class="value">OptiFlow</div>
+        </div>
+        <div class="cover-meta-item">
+          <div class="label">College</div>
+          <div class="value">GNDEC Ludhiana</div>
+        </div>
+      </div>
+    </div>
+    <button class="cover-cta" onclick="openDiary()">Open Diary &rarr;</button>
+  </div>
+</div>
+
+<!-- ══════════ DIARY ══════════ -->
+<div class="diary-container" id="diary">
+
+  <div class="top-bar">
+    <div class="top-bar-title">Internship Diary &mdash; Nirman Fincap</div>
+    <div class="top-bar-nav">
+      <button class="nav-btn active" onclick="setMode('weekly', this)">Weekly</button>
+      <button class="nav-btn" onclick="setMode('overview', this)">Overview</button>
+    </div>
+  </div>
+
+  <!-- ── WEEKLY MODE ── -->
+  <div id="weekly-mode">
+    <div class="diary-layout">
+
+      <nav class="sidebar">
+        <div class="sidebar-label">Weeks</div>
+        <ul class="week-nav" id="week-nav"></ul>
+      </nav>
+
+      <div class="content">
+        <div class="filter-bar">
+          <input type="text" id="search-input" placeholder="Search activities…" oninput="filterWeeks()" />
+        </div>
+        <div id="weeks-container"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── OVERVIEW MODE ── -->
+  <div id="overview-mode" style="display:none;">
+    <div class="overview-grid" id="overview-grid"></div>
+  </div>
+
+</div>
+
+<script>
+const WEEKS = [
+  {
+    n:1, title:"Orientation & Company Introduction",
+    phase:"onboarding", dates:"Week 1",
+    summary:"Joined Nirman Fincap, attended orientation sessions, toured the trading floor.",
+    days:[
+      {name:"Mon", worked:true, acts:["Received joining letter and completed documentation", "Attended HR orientation session — company history, culture, code of conduct"], tag:"meeting"},
+      {name:"Tue", worked:true, acts:["Introduction to the IT and trading infrastructure team", "Overview of NIFTY derivatives market basics by mentor"], tag:"learn"},
+      {name:"Wed", worked:true, acts:["Toured the trading floor and observed live session", "Introduced to the XTS trading platform used by Nirmal Bang"], tag:"learn"},
+      {name:"Thu", worked:true, acts:["Read internal documentation on brokerage operations", "Set up workstation: Python 3.10, VSCode, Git, Postman"], tag:"learn"},
+      {name:"Fri", worked:true, acts:["Team meeting to discuss the project scope for the internship period", "First interaction with assigned project mentor"], note:"Assigned project: build an automated NIFTY options monitoring system over the course of the internship.", tag:"meeting"},
+    ]
+  },
+  {
+    n:2, title:"Financial Markets & Options Fundamentals",
+    phase:"learning", dates:"Week 2",
+    summary:"Deep-dived into options theory, NIFTY index, derivatives terminology.",
+    days:[
+      {name:"Mon", worked:true, acts:["Studied call and put options — payoff diagrams, premium components", "Completed Chapter 1–3 of Hull's Options, Futures & Other Derivatives"], tag:"learn"},
+      {name:"Tue", worked:true, acts:["Learned about NIFTY 50 index composition and weekly expiry cycles", "Studied At-The-Money (ATM), ITM, OTM strike selection logic"], tag:"learn"},
+      {name:"Wed", worked:true, acts:["Introduction to implied volatility (IV) — definition, significance in options pricing", "Studied the Black-Scholes model at a conceptual level"], tag:"learn"},
+      {name:"Thu", worked:true, acts:["Explored icharts.in — live options chain, IV table navigation", "Practiced reading NIFTY options chain manually for 1 hour"], tag:"learn"},
+      {name:"Fri", worked:true, acts:["Attended internal seminar on systematic vs discretionary trading", "Took mentor quiz on options basics — passed with good score"], note:"Key takeaway: IV contraction is a core signal for premium selling strategies.", tag:"review"},
+    ]
+  },
+  {
+    n:3, title:"XTS API & Market Data Architecture",
+    phase:"learning", dates:"Week 3",
+    summary:"Studied the XTS API documentation and understood the live data feed architecture.",
+    days:[
+      {name:"Mon", worked:true, acts:["Received access to internal XTS API documentation from Nirmal Bang", "Studied REST authentication flow: API key, secret key, session token management"], tag:"learn"},
+      {name:"Tue", worked:true, acts:["Studied instrument master structure — exchange segment, symbol format, expiry date", "Practiced filtering NIFTY weekly CE/PE strikes from the instrument list"], tag:"learn"},
+      {name:"Wed", worked:true, acts:["Studied WebSocket Touchline (message code 1501) payload structure", "Understood binary packet format — compressed vs uncompressed frames"], tag:"learn"},
+      {name:"Thu", worked:true, acts:["Manually tested XTS REST endpoints in Postman: login, getInstrumentsByID, subscription", "Understood bid/ask field layout in the Touchline response"], tag:"learn"},
+      {name:"Fri", worked:true, acts:["Reviewed XTS exception hierarchy: XTSException, XTSTokenException, XTSNetworkException", "Drafted initial design notes for the Connect.py wrapper module"], note:"The binary packet format has two modes (compressed/uncompressed) — both must be handled.", tag:"learn"},
+    ]
+  },
+  {
+    n:4, title:"Setting Up Project Structure & Connect.py",
+    phase:"development", dates:"Week 4",
+    summary:"Started coding — built the XTS API wrapper and validated all REST endpoints.",
+    days:[
+      {name:"Mon", worked:true, acts:["Created GitHub repository for OptiFlow project", "Set up project folder structure: collector, strategy, scraper, dashboard modules", "Created config.ini template for API keys and parameters"], tag:"build"},
+      {name:"Tue", worked:true, acts:["Wrote Connect.py: authentication method with API key + secret key", "Implemented session token storage and token refresh logic"], tag:"build"},
+      {name:"Wed", worked:true, acts:["Implemented instrument master fetch and filtering logic in Connect.py", "Wrote subscription management endpoints (subscribe, unsubscribe)"], tag:"build"},
+      {name:"Thu", worked:true, acts:["Tested Connect.py against live XTS API using Postman — all endpoints validated", "Fixed edge case: handle empty instrument master response gracefully"], tag:"test"},
+      {name:"Fri", worked:true, acts:["Code review session with mentor — feedback on error handling structure", "Implemented full XTS exception hierarchy as custom Python exceptions"], note:"Mentor emphasized: never crash on a malformed response — wrap everything in try/except.", tag:"review"},
+    ]
+  },
+  {
+    n:5, title:"Binary Packet Decoder — Design & Implementation",
+    phase:"development", dates:"Week 5",
+    summary:"Designed and implemented the binary Touchline packet parser for the XTS WebSocket feed.",
+    days:[
+      {name:"Mon", worked:true, acts:["Studied XTS binary Touchline packet specification in depth", "Mapped all field offsets: LTP, bid, ask, volume, OI, timestamp"], tag:"learn"},
+      {name:"Tue", worked:true, acts:["Wrote binary_reader.py: typed binary packet parsing using Python struct module", "Implemented uncompressed single-packet and multi-packet frame decoders"], tag:"build"},
+      {name:"Wed", worked:true, acts:["Implemented gzip-deflated (compressed) multi-packet frame decoder using zlib", "Added format detection logic — auto-detect compressed vs uncompressed based on header byte"], tag:"build"},
+      {name:"Thu", worked:true, acts:["Validated decoded LTP values against live Nirmal Bang trading terminal — matched perfectly", "Debugged off-by-two-byte error in bid/ask field offset — fixed"], tag:"test"},
+      {name:"Fri", worked:true, acts:["Added MarketDepthEvent deserializer as secondary decoder for depth packets", "Wrote unit test for decoder: 8 test cases, all passing"], note:"Validating decoded values against the trading terminal was the most critical step — took a full session.", tag:"test"},
+    ]
+  },
+  {
+    n:6, title:"CandleBuffer Class & CSV Pipeline",
+    phase:"development", dates:"Week 6",
+    summary:"Built the OHLCV candle aggregation system and file persistence layer.",
+    days:[
+      {name:"Mon", worked:true, acts:["Designed CandleBuffer class: maintains open, high, low, close, volume, OI per instrument", "Implemented update() method: processes each incoming tick and updates OHLCV fields"], tag:"build"},
+      {name:"Tue", worked:true, acts:["Implemented reset() and reset_full() methods for end-of-candle flush", "Implemented snapshot() to return a clean dictionary for CSV writing"], tag:"build"},
+      {name:"Wed", worked:true, acts:["Wrote candle-writer background thread: fires at 15-second boundaries", "Implemented per-instrument threading.Lock to prevent race conditions on CSV writes"], tag:"build"},
+      {name:"Thu", worked:true, acts:["Wrote CSV flush logic: append one OHLCV row per 15-second interval to each instrument file", "Created data directory structure: data/DD-MM-YYYY/{symbol}.csv"], tag:"build"},
+      {name:"Fri", worked:true, acts:["Validated CandleBuffer unit test: open/high/low/close computed correctly from known tick sequence", "Ran first live test — 5 instruments, 10 minutes — CSV files generated correctly"], note:"Confirmed tick-to-CSV latency is under 2 seconds even with 61 instruments.", tag:"test"},
+    ]
+  },
+  {
+    n:7, title:"WebSocket Integration & Full collector.py",
+    phase:"development", dates:"Week 7",
+    summary:"Integrated the WebSocket connection, built MDSocket class, completed collector.py.",
+    days:[
+      {name:"Mon", worked:true, acts:["Wrote MDSocket class using python-socketio: manages WebSocket connect/disconnect/reconnect", "Implemented on_message handler: dispatches incoming packets to the decoder pipeline"], tag:"build"},
+      {name:"Tue", worked:true, acts:["Built full instrument discovery flow: fetch master → filter strikes → build strike map", "Implemented batch subscription in sets of 100 instruments (XTS API limit)"], tag:"build"},
+      {name:"Wed", worked:true, acts:["Implemented bid/ask-writer background thread: fires every 3 seconds", "Wrote atomic bidask.json write using write-to-temp-then-rename pattern"], tag:"build"},
+      {name:"Thu", worked:true, acts:["Implemented extract_bid_ask() handling all three data shapes from XTS feed", "Added graceful shutdown via threading.Event stop signal"], tag:"build"},
+      {name:"Fri", worked:true, acts:["First full live session test: 09:15–15:30, 61 instruments, no crashes", "61 CSV files produced, all instruments complete, no missing candle windows"], note:"collector.py is production-ready after this session. Ran successfully across 3 consecutive live sessions.", tag:"test"},
+    ]
+  },
+  {
+    n:8, title:"collector.py Hardening & Live Validation",
+    phase:"testing", dates:"Week 8",
+    summary:"Stress-tested collector across live sessions, added robustness features.",
+    days:[
+      {name:"Mon", worked:true, acts:["Simulated WebSocket disconnection mid-session — verified auto-reconnect in under 45 seconds", "Added reconnection event logging with timestamp"], tag:"test"},
+      {name:"Tue", worked:true, acts:["Tested compressed packet decoder with edge cases: empty frame, single-instrument frame", "Verified decoded OI field matches exchange data across 3 strikes"], tag:"test"},
+      {name:"Wed", worked:true, acts:["Tested bidask.json atomic write under high-frequency conditions — no partial reads observed", "Added fallback: if bidask.json write fails, log error and skip (do not crash)"], tag:"test"},
+      {name:"Thu", worked:true, acts:["Ran full day session — measured tick-to-CSV latency: maximum observed was 1.8 seconds", "Confirmed 61 CSV files produced per session with no data corruption"], tag:"test"},
+      {name:"Fri", worked:true, acts:["Weekly review meeting with mentor — demo of collector terminal output", "Received approval to proceed to strategy_monitor.py development"], note:"Three consecutive full-day runs completed without a single crash. collector.py declared complete.", tag:"review"},
+    ]
+  },
+  {
+    n:9, title:"RSI & Technical Indicators for strategy_monitor",
+    phase:"development", dates:"Week 9",
+    summary:"Implemented RSI with Wilder smoothing and studied all 7 strategy conditions.",
+    days:[
+      {name:"Mon", worked:true, acts:["Studied Wilder's RSI calculation methodology from New Concepts in Technical Trading Systems", "Understood difference between standard RSI (EMA) and Wilder smoothing (SMMA)"], tag:"learn"},
+      {name:"Tue", worked:true, acts:["Implemented compute_rsi() using pandas: compute gains/losses → Wilder SMMA → RSI", "Validated output against manual calculation for 20-row close series — matched to 4 decimal places"], tag:"build"},
+      {name:"Wed", worked:true, acts:["Implemented load_all_strikes(): reads all strike CSV files into pandas DataFrames", "Implemented load_spot(): loads NIFTY SPOT CSV and returns latest close price"], tag:"build"},
+      {name:"Thu", worked:true, acts:["Implemented ATM identification from spot price with configurable step size (50 points)", "Handled boundary case: spot at exactly midpoint rounds to lower strike (round-half-to-even)"], tag:"build"},
+      {name:"Fri", worked:true, acts:["Implemented straddle_premium(): sum of ATM CE and PE latest close prices", "Implemented straddle_day_low tracker: persists minimum straddle seen since 09:15"], note:"RSI with fewer candles than the lookback period gracefully returns None — no signal generated.", tag:"build"},
+    ]
+  },
+  {
+    n:10, title:"Strategy Evaluation Engine — Core Logic",
+    phase:"development", dates:"Week 10",
+    summary:"Built the 7-condition strategy evaluation engine at the heart of strategy_monitor.py.",
+    days:[
+      {name:"Mon", worked:true, acts:["Designed the 7-condition evaluation framework as a list of independent boolean checks", "Implemented Condition 1: RSI threshold filter (configurable upper/lower bounds)"], tag:"build"},
+      {name:"Tue", worked:true, acts:["Implemented Condition 2: straddle premium relative to day-low × configurable multiplier", "Implemented Condition 3: IV contraction check using iv_contracting flag from iv_live.json"], tag:"build"},
+      {name:"Wed", worked:true, acts:["Implemented Condition 4: bid/ask data freshness check (modification timestamp within threshold)", "Implemented Condition 5: zone-based filter using configurable zone count parameter"], tag:"build"},
+      {name:"Thu", worked:true, acts:["Implemented Condition 6: time-of-day filter (no entries before 09:45 or after 15:00)", "Implemented Condition 7: SMA-based trend filter from spot price", "Wired all 7 conditions into a single evaluate_conditions() function"], tag:"build"},
+      {name:"Fri", worked:true, acts:["Wrote manual test: force all conditions true for one strike — entry signal generated correctly", "Wrote test: with one condition false — no signal generated"], note:"All 7 conditions are individually toggleable via config without code changes.", tag:"test"},
+    ]
+  },
+  {
+    n:11, title:"Trade Entry, Stop-Loss & Target Logic",
+    phase:"development", dates:"Week 11",
+    summary:"Built trade lifecycle management — entry signals, open position monitoring, exits.",
+    days:[
+      {name:"Mon", worked:true, acts:["Implemented generate_entry_signal(): creates trade record with live bid as entry price", "Trade record includes: symbol, entry_time, entry_price, stop_loss, target, spot, ATM, straddle"], tag:"build"},
+      {name:"Tue", worked:true, acts:["Implemented stop_loss and target computation from configurable PT/SL multipliers", "Entry price = live bid (sell); stop-loss and target = percentage of entry price"], tag:"build"},
+      {name:"Wed", worked:true, acts:["Implemented monitor_open_trades(): evaluates stop-loss and target on every cycle", "Exit price = live ask (buy-back); realized P&L = entry_price − exit_price"], tag:"build"},
+      {name:"Thu", worked:true, acts:["Implemented EOD force-close at 15:30 with reason 'EOD_CUTOFF'", "Implemented cooldown mechanism: minimum minutes between consecutive entries on same strike"], tag:"build"},
+      {name:"Fri", worked:true, acts:["Manual test: open a trade, set ask above stop-loss — trade closed with reason SL", "Manual test: set ask below target — trade closed with reason TARGET", "Wrote trades CSV with full trade context on each closed trade"], tag:"test"},
+    ]
+  },
+  {
+    n:12, title:"signals.json & Candle-Aligned Scheduler",
+    phase:"development", dates:"Week 12",
+    summary:"Built the signals.json output serializer and the candle-aligned wake-up scheduler.",
+    days:[
+      {name:"Mon", worked:true, acts:["Designed signals.json schema: spot, ATM, straddle, day_low, conditions, open_trades, closed_trades", "Implemented serialize_state(): builds the full signals.json payload after every cycle"], tag:"build"},
+      {name:"Tue", worked:true, acts:["Implemented atomic signals.json write: write-to-temp-then-rename pattern", "Ensured dashboard always reads a complete JSON file, never a partial write"], tag:"build"},
+      {name:"Wed", worked:true, acts:["Implemented next_read_time(): computes next 15-second boundary + 5-second read offset", "The 5-second offset ensures CSV files are fully flushed before strategy reads them"], tag:"build"},
+      {name:"Thu", worked:true, acts:["Implemented market_open_wait(): loops until 09:15 before starting data collection", "Implemented first_data_detection(): waits until at least one CSV file has content"], tag:"build"},
+      {name:"Fri", worked:true, acts:["End-to-end live test of strategy_monitor with mock conditions forced true", "signals.json written every 15 seconds — verified content matches terminal output"], note:"The 5-second read offset after candle boundary prevents reading partial CSV files.", tag:"test"},
+    ]
+  },
+  {
+    n:13, title:"Alert System — Desktop & Push Notifications",
+    phase:"development", dates:"Week 13",
+    summary:"Implemented real-time alert delivery via desktop notifications and ntfy.sh push alerts.",
+    days:[
+      {name:"Mon", worked:true, acts:["Integrated plyer library for cross-platform desktop toast notifications on entry/exit signals", "Integrated winsound for distinct audio tones: profit exit vs stop-loss exit"], tag:"build"},
+      {name:"Tue", worked:true, acts:["Integrated ntfy.sh push notification API via HTTP POST", "Implemented send_push_alert(): sends symbol, signal type, price, P&L to ntfy.sh topic"], tag:"build"},
+      {name:"Wed", worked:true, acts:["Tested desktop notification on entry event — appeared correctly with symbol and entry price", "Tested ntfy.sh push to mobile — notification received on phone within 3 seconds"], tag:"test"},
+      {name:"Thu", worked:true, acts:["Added distinct tones: high beep for TARGET exit, low beep for SL exit", "Wrapped all alert dispatch in try/except — alert failure must not crash the monitor"], tag:"build"},
+      {name:"Fri", worked:true, acts:["Full live session with alert system active — alerts fired correctly on all simulated signals", "Tested alert on EOD force-close — correct notification text generated"], note:"All notifications fire within one evaluation cycle (~15 seconds) of any signal event.", tag:"test"},
+    ]
+  },
+  {
+    n:14, title:"IV Scraper — Selenium & icharts.in Integration",
+    phase:"development", dates:"Week 14",
+    summary:"Built the Selenium-based IV scraper for live implied volatility from icharts.in.",
+    days:[
+      {name:"Mon", worked:true, acts:["Studied icharts.in options IV table structure: ATM selection, CE/PE IV columns, table layout", "Manually navigated the flow: select expiry → select ATM strike → read IV values"], tag:"learn"},
+      {name:"Tue", worked:true, acts:["Set up Selenium with headless Chrome and ChromeDriver", "Implemented browser login flow for icharts.in — handles cookie consent and session"], tag:"build"},
+      {name:"Wed", worked:true, acts:["Implemented IV table extraction: locate ATM CE/PE IV cells using XPath selectors", "Implemented opening IV capture at 09:18 (first stable read of the session)"], tag:"build"},
+      {name:"Thu", worked:true, acts:["Implemented 1-minute refresh loop: re-read CE/PE IV and update iv_live.json", "Implemented iv_contracting boolean: True when avg_iv < opening_iv"], tag:"build"},
+      {name:"Fri", worked:true, acts:["Implemented ATM change detection: reads signals.json every cycle for updated ATM", "Implemented WebDriverException auto-restart: browser crashes are recovered automatically"], note:"IV contraction detection requires opening IV to be stable — hence the 09:18 capture rather than 09:15.", tag:"build"},
+    ]
+  },
+  {
+    n:15, title:"IV Scraper Validation & iv_live.json Schema",
+    phase:"testing", dates:"Week 15",
+    summary:"Validated IV scraper against live sessions, finalized iv_live.json schema.",
+    days:[
+      {name:"Mon", worked:true, acts:["Ran IV scraper during live market session — validated CE IV and PE IV against icharts.in manually", "All CE and PE values matched site values within ±0.5%"], tag:"test"},
+      {name:"Tue", worked:true, acts:["Tested ATM change detection: spot moved across strike boundary mid-session", "IV scraper switched target strike on icharts.in within the next fetch cycle — correct"], tag:"test"},
+      {name:"Wed", worked:true, acts:["Simulated Chrome crash via process kill — auto-restart completed and resumed within 45 seconds", "Session re-established without manual intervention — test passed"], tag:"test"},
+      {name:"Thu", worked:true, acts:["Finalized iv_live.json schema: date, timestamp, opening_atm, opening_iv, atm_strike, ce_iv, pe_iv, avg_iv, iv_contracting", "Wrote schema documentation in the project report"], tag:"build"},
+      {name:"Fri", worked:true, acts:["Weekly review with mentor — demonstrated live IV scraper running alongside collector", "Mentor approved the scraper module — marked as complete"], note:"Keeping the browser session alive for 6+ hours requires careful exception handling and auto-restart logic.", tag:"review"},
+    ]
+  },
+  {
+    n:16, title:"Dashboard HTML — Live Visualization",
+    phase:"development", dates:"Week 16",
+    summary:"Built the browser-based trading dashboard that renders all system state in real time.",
+    days:[
+      {name:"Mon", worked:true, acts:["Designed dashboard.html layout: header bar, condition badges, open positions table, closed trades table, event log", "Chose dark trading terminal aesthetic with green/red P&L coloring"], tag:"build"},
+      {name:"Tue", worked:true, acts:["Implemented polling loop: fetch signals.json every 5 seconds using browser Fetch API", "Implemented renderHeader(): displays live spot price, ATM strike, straddle, day-low"], tag:"build"},
+      {name:"Wed", worked:true, acts:["Implemented renderConditions(): renders pass/fail badges for all 7 enabled conditions", "Implemented renderOpenTrades(): shows entry price, current ask, running P&L colored green/red"], tag:"build"},
+      {name:"Thu", worked:true, acts:["Implemented renderClosedTrades(): shows full trade history with exit reason and final P&L", "Implemented bid/ask feed health badge: turns red if bidask.json becomes stale"], tag:"build"},
+      {name:"Fri", worked:true, acts:["Implemented rolling event log: timestamped list of session events (entry, exit, ATM change, etc.)", "First live test of dashboard — all fields render correctly from signals.json"], tag:"test"},
+    ]
+  },
+  {
+    n:17, title:"Full System Integration Testing",
+    phase:"testing", dates:"Week 17",
+    summary:"Ran all four modules together for the first time — end-to-end integration testing.",
+    days:[
+      {name:"Mon", worked:true, acts:["Ran all four modules concurrently: collector, IV scraper, strategy monitor, dashboard", "Verified inter-process file communication — no stale reads, no deadlocks"], tag:"test"},
+      {name:"Tue", worked:true, acts:["Integration test TC16: collector to CSV pipeline — CSVs appear within 15 seconds ✓", "Integration test TC17: collector to bidask.json — snapshot written every 3 seconds ✓", "Integration test TC18: strategy monitor reads CSV — correct ATM and straddle logged ✓"], tag:"test"},
+      {name:"Wed", worked:true, acts:["Integration test TC19: IV scraper to strategy monitor — iv_contracting flag applied correctly ✓", "Integration test TC20: signal to alert pipeline — entry alert fires within one cycle ✓"], tag:"test"},
+      {name:"Thu", worked:true, acts:["Integration test TC21: stop-loss exit flow — trade closed with SL reason ✓", "Integration test TC22: EOD force-close at 15:30 — all positions closed with EOD_CUTOFF ✓", "Integration test TC23: dashboard renders all signals.json fields ✓"], tag:"test"},
+      {name:"Fri", worked:true, acts:["All 8 integration test cases passed on first full-system run", "Documented integration test results in Table 5.2 of project report"], note:"Running all four concurrent processes for a full day with no crashes is a significant milestone.", tag:"test"},
+    ]
+  },
+  {
+    n:18, title:"Edge Case Testing & System Hardening",
+    phase:"testing", dates:"Week 18",
+    summary:"Tested all identified edge cases, hardened the system against market boundary conditions.",
+    days:[
+      {name:"Mon", worked:true, acts:["Edge case TC24: collector starts before 09:15 — subscribes and waits correctly ✓", "Edge case TC25: monitor starts before CSVs exist — waits silently, logs warning ✓"], tag:"test"},
+      {name:"Tue", worked:true, acts:["Edge case TC26: strike with fewer than RSI_PERIOD candles — RSI returns None, no signal ✓", "Edge case TC27: WebSocket disconnection mid-session — reconnects automatically ✓"], tag:"test"},
+      {name:"Wed", worked:true, acts:["Edge case TC28: stale bidask.json during reconnection — signals suppressed correctly ✓", "Edge case TC29: ATM change mid-session — monitor and IV scraper both switch strike ✓"], tag:"test"},
+      {name:"Thu", worked:true, acts:["Edge case TC30: IV scraper WebDriverException — browser restarted, session re-established ✓", "All 7 edge cases passed — documented in Table 5.3 of project report"], tag:"test"},
+      {name:"Fri", worked:true, acts:["System hardening: added more granular logging across all modules", "Added console log for every significant state transition in all four modules"], note:"All 30 test cases (13 unit + 8 integration + 7 edge) passed. Testing phase complete.", tag:"review"},
+    ]
+  },
+  {
+    n:19, title:"Live Session Performance Validation",
+    phase:"testing", dates:"Week 19",
+    summary:"Validated full system performance across three consecutive live trading sessions.",
+    days:[
+      {name:"Mon", worked:true, acts:["Live session 1: full system running, collected data for 61 instruments 09:15–15:30", "Observed tick-to-CSV latency: max 1.8 seconds across full session"], tag:"test"},
+      {name:"Tue", worked:true, acts:["Live session 2: repeated full run — all CSVs complete, no data corruption detected", "Measured bid/ask write interval: consistent 3-second writes observed throughout session"], tag:"test"},
+      {name:"Wed", worked:true, acts:["Live session 3: third consecutive run — collector uptime 100%, no crashes", "Decoded LTP verified against trading terminal for 8 instruments — all matched"], tag:"test"},
+      {name:"Thu", worked:true, acts:["Compiled Live Session Validation Results table (Table 6.1) for project report", "All performance metrics met or exceeded targets"], tag:"review"},
+      {name:"Fri", worked:true, acts:["Midterm report writing: drafted Chapters 1–6 with mentor feedback", "Prepared Output Screens section with annotated terminal screenshots"], note:"Three consecutive full-day live sessions without any crash is the key validation milestone for the collector.", tag:"build"},
+    ]
+  },
+  {
+    n:20, title:"Report Writing & Documentation",
+    phase:"integration", dates:"Week 20",
+    summary:"Wrote and finalized the midterm project report — all chapters, diagrams, and tables.",
+    days:[
+      {name:"Mon", worked:true, acts:["Drafted Chapter 1 (Introduction) and Chapter 2 (System Requirements)", "Created system architecture diagram in LaTeX using tikz — four-layer pipeline"], tag:"build"},
+      {name:"Tue", worked:true, acts:["Drafted Chapter 3 (Software Requirement Analysis) — all four module definitions", "Wrote functional requirements and non-functional requirements sections"], tag:"build"},
+      {name:"Wed", worked:true, acts:["Created Level 0 DFD (Context Diagram) and Level 1 DFD (Internal Process Decomposition)", "Created Entity-Relationship Diagram with 5 logical entities"], tag:"build"},
+      {name:"Thu", worked:true, acts:["Drafted Chapter 5 (Testing Module) — all 30 test cases in formatted tables", "Drafted Chapter 6 (Performance) — work completed, live session results, remaining work"], tag:"build"},
+      {name:"Fri", worked:true, acts:["Final review of full report with mentor — minor corrections applied", "Report compiled to PDF and submitted as midterm deliverable"], note:"Report spans 38 pages including all diagrams, tables, output screens and references.", tag:"review"},
+    ]
+  },
+  {
+    n:21, title:"Strategy Parameter Tuning & Optimization",
+    phase:"integration", dates:"Week 21",
+    summary:"Analyzed live session signal data, tuned strategy parameters for better signal quality.",
+    days:[
+      {name:"Mon", worked:true, acts:["Analyzed 3 weeks of collected OHLCV data — identified typical RSI range during high-IV days", "Adjusted RSI threshold parameters in config.ini based on observed data distribution"], tag:"build"},
+      {name:"Tue", worked:true, acts:["Back-tested straddle multiplier values against historical day-low data from collected CSVs", "Adjusted straddle_mult from 2.0 to 2.04 based on observed day-session patterns"], tag:"build"},
+      {name:"Wed", worked:true, acts:["Tuned zone_count parameter: reduced from 30 to 28 after review of false signal rate", "Reviewed cooldown mechanism: set minimum gap to 20 minutes between entries on same strike"], tag:"build"},
+      {name:"Thu", worked:true, acts:["Ran tuned config for one live session — 0 signals generated (IV not contracting)", "Verified no false signals triggered — all 7 conditions correctly suppressing entry"], tag:"test"},
+      {name:"Fri", worked:true, acts:["Documented parameter choices and rationale in config.ini comments", "Mentor review of parameter tuning session — approved all changes"], note:"Strategy parameter tuning is ongoing — requires multiple live sessions to observe real signal conditions.", tag:"review"},
+    ]
+  },
+  {
+    n:22, title:"Final Integration, Wrap-Up & Internship Conclusion",
+    phase:"integration", dates:"Week 22",
+    summary:"Final system run, exit formalities, lessons learned presentation, and internship conclusion.",
+    days:[
+      {name:"Mon", worked:true, acts:["Final full-system live session: all four modules running — 09:15 to 15:30", "System ran without any issues; all data files correctly generated"], tag:"test"},
+      {name:"Tue", worked:true, acts:["Prepared final internship presentation: system architecture, live demo, performance results", "Created slide deck summarizing OptiFlow's objectives, implementation, and outcomes"], tag:"build"},
+      {name:"Wed", worked:true, acts:["Delivered final presentation to mentor and IT team at Nirmal Fincap", "Live demo of collector terminal, dashboard, and signal alert system"], tag:"meeting"},
+      {name:"Thu", worked:true, acts:["Completed code cleanup: removed debug prints, ensured all modules have structured logging", "Pushed final version to GitHub with complete README documentation"], tag:"build"},
+      {name:"Fri", worked:true, acts:["Exit formalities: returned access credentials and equipment", "Received internship completion certificate from Nirman Fincap", "Reflected on 22-week journey: from zero knowledge of XTS API to a fully working production trading system"], note:"OptiFlow — a real-time NIFTY options monitoring system — built from scratch over 22 weeks of industrial training. A complete, production-validated system.", tag:"review"},
+    ]
+  }
+];
+
+const PHASE_LABELS = {
+  onboarding:"Onboarding", learning:"Learning", development:"Development",
+  testing:"Testing", integration:"Integration"
+};
+
+let currentMode = "weekly";
+let expandedWeeks = new Set([1]);
+
+function openDiary() {
+  document.getElementById("cover").style.display = "none";
+  document.getElementById("diary").style.display = "block";
+  renderAll();
+  scrollToWeek(1);
+}
+
+function renderAll() {
+  renderWeekNav();
+  renderWeekCards();
+  renderOverview();
+}
+
+function renderWeekNav() {
+  const nav = document.getElementById("week-nav");
+  nav.innerHTML = WEEKS.map(w => `
+    <li><a href="#week-${w.n}" id="nav-w${w.n}" onclick="scrollToWeek(${w.n})" class="${w.n===1?'active':''}">
+      W${String(w.n).padStart(2,'0')} &mdash; ${PHASE_LABELS[w.phase].slice(0,4)}</a></li>
+  `).join("");
+}
+
+function renderWeekCards() {
+  const container = document.getElementById("weeks-container");
+  container.innerHTML = WEEKS.map(w => {
+    const days = w.days.map(d => `
+      <div class="day-entry">
+        <div class="day-label">
+          <div class="day-name">${d.name}</div>
+          <div class="day-dot ${d.worked?'worked':''}"></div>
+        </div>
+        <div class="day-content">
+          <ul class="day-activities">
+            ${d.acts.map(a=>`<li>${a}</li>`).join("")}
+          </ul>
+          ${d.note?`<div class="day-note">${d.note}</div>`:""}
+          ${d.tag?`<div class="day-tag tag-${d.tag}">${d.tag}</div>`:""}
+        </div>
+      </div>
+    `).join("");
+
+    return `
+      <div class="week-card visible ${expandedWeeks.has(w.n)?'expanded':''}" id="week-${w.n}" data-week="${w.n}" data-phase="${w.phase}">
+        <div class="week-header" onclick="toggleWeek(${w.n})">
+          <div class="week-header-left">
+            <div class="week-num">${String(w.n).padStart(2,"0")}</div>
+            <div class="week-header-text">
+              <div class="week-title">${w.title}</div>
+              <div class="week-dates">${w.dates} &bull; <span class="ov-phase phase-${w.phase}">${PHASE_LABELS[w.phase]}</span></div>
+            </div>
+          </div>
+          <div class="week-toggle">&#8964;</div>
+        </div>
+        <div class="week-summary">
+          <div class="week-summary-item"><span class="s-label">Days</span><span class="s-val">5</span></div>
+          <div class="week-summary-item"><span class="s-label">Summary</span><span class="s-val" style="font-size:11px;font-family:'DM Sans';font-weight:400;color:var(--ink-soft)">${w.summary}</span></div>
+        </div>
+        <div class="week-body">${days}</div>
+      </div>
+    `;
+  }).join("");
+}
+
+function renderOverview() {
+  const grid = document.getElementById("overview-grid");
+  grid.innerHTML = WEEKS.map(w => `
+    <div class="overview-card" onclick="goToWeek(${w.n})">
+      <div class="ov-week">Week ${w.n}</div>
+      <div class="ov-title">${w.title}</div>
+      <span class="ov-phase phase-${w.phase}">${PHASE_LABELS[w.phase]}</span>
+    </div>
+  `).join("");
+}
+
+function toggleWeek(n) {
+  const card = document.getElementById("week-"+n);
+  if(expandedWeeks.has(n)) {
+    expandedWeeks.delete(n);
+    card.classList.remove("expanded");
+  } else {
+    expandedWeeks.add(n);
+    card.classList.add("expanded");
+  }
+}
+
+function scrollToWeek(n) {
+  if(!expandedWeeks.has(n)) {
+    expandedWeeks.add(n);
+    const card = document.getElementById("week-"+n);
+    if(card) card.classList.add("expanded");
+  }
+  document.querySelectorAll(".week-nav li a").forEach(a => a.classList.remove("active"));
+  const navItem = document.getElementById("nav-w"+n);
+  if(navItem) navItem.classList.add("active");
+  const el = document.getElementById("week-"+n);
+  if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+function goToWeek(n) {
+  setMode("weekly", document.querySelector('.nav-btn'));
+  document.querySelectorAll('.nav-btn').forEach(b => {
+    b.classList.toggle("active", b.textContent.trim()==="Weekly");
+  });
+  setTimeout(() => scrollToWeek(n), 50);
+}
+
+function setMode(mode, btn) {
+  currentMode = mode;
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove("active"));
+  if(btn) btn.classList.add("active");
+  document.getElementById("weekly-mode").style.display = mode==="weekly"?"block":"none";
+  document.getElementById("overview-mode").style.display = mode==="overview"?"block":"none";
+}
+
+function filterWeeks() {
+  const q = document.getElementById("search-input").value.toLowerCase();
+  WEEKS.forEach(w => {
+    const card = document.getElementById("week-"+w.n);
+    if(!q) { card.classList.add("visible"); return; }
+    const text = (w.title + w.summary + w.days.map(d=>d.acts.join(" ")).join(" ")).toLowerCase();
+    card.classList.toggle("visible", text.includes(q));
+  });
+}
+</script>
+</body>
+</html>
